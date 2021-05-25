@@ -1,3 +1,5 @@
+'use strict'
+
 // 1. Реализовать возведение в целую степень. (pow(base, exponent) => base**exponent, 
 // где base любое число, exponent - натуральное (1, 2, 3) или * целое число(-2, -1, 0, 1, 2)).
 
@@ -93,60 +95,55 @@ console.group('Task 12 - method flat');
     };
 
 
-
     MyArray.prototype = myArrayProto;
-    const superObj = new MyArray();
-    const arrObj = new MyArray();
-    let m = 2;
-    
-    myArrayProto.flat = function(n) {
-    
-        let returningObj = new MyArray();
-
-        for(let i = 0; i < this.length; i++) {
-            if (n === 0) {
-                return this;
-            };
-
-            if ( Array.isArray(this[i]) ) {
-                if (!n) {
-                    const arr = this[i].join(',').split(',');
-
-                    for (let j = 0; j < arr.length; j++) {
-                        returningObj.push(arr[j]);
-                    };
-                };
-
-                console.log('n :>> ', n);
-                console.log(`this[${i}] :>> `, this[i]);
-                const arr = this[i];
-
-                this[i].forEach(item => {
-                   
-                    if (!Array.isArray(item) ) {
-                        superObj.push(item + ' - rec n = ' + n);
-                    } else if (n === 1) { 
-                        superObj.push(item + ' - rec n = ' + n);
-                    } else {
-                        returningObj.flat.call(this[i], n - 1);
-                    }
-                });
-            } else if (this[i] === ' ') {
-                delete this[i];
-            } else {
-                returningObj.push(this[i]);
-                if (n === m) {
-                    superObj.push(this[i] + '- elem');
-                }
-            };
-            
-        };
         
-        return returningObj;
+    myArrayProto.flat = function(n) {
+
+        const superObj = new MyArray();
+        const m = n;
+
+        if (n === 0) {
+            return this;
+        };
+
+        const runFlat = flatten.bind(this, n);
+        runFlat(); 
+        
+        function flatten(n) {
+            for(let i = 0; i < this.length; i++) {
+                if ( Array.isArray(this[i]) ) {
+                    if (n === undefined) {
+                        const arr = this[i].join(',').split(',');
+    
+                        for (let j = 0; j < arr.length; j++) {
+                            superObj.push(arr[j]);
+                        }; 
+                    } else {
+                        this[i].forEach(item => {
+                            if (!Array.isArray(item) ) {
+                                superObj.push(item);
+                            } else if (n === 1) { 
+                                superObj.push(item);
+                            } else {
+                                flatten.call(this[i], n - 1);
+                            }
+                        });
+                    }
+                } else if (this[i] === ' ') {
+                    continue;
+                } else {
+                    if (n === m) {
+                        superObj.push(this[i]);
+                    };
+                };      
+            };
+        };
+        return superObj;
     };
 
-      
+
     const myArr1 = new MyArray();
+
 
     for(let i = 0; i <= 6; i++) {
         if (i === 2) {
@@ -155,11 +152,11 @@ console.group('Task 12 - method flat');
         if(i === 3) {
             myArr1.push(['lll', ['dddd', ['Ivan', 'Hert'], 'ffd'], 'GGGG']);
         };
-        if (i === 5) {
-            myArr1.push(['w', 's', 'uyu']);
-        };
         if(i === 4) {
             myArr1.push(['af', 'ft']);
+        };
+        if (i === 5) {
+            myArr1.push(['w', 's', 'uyu']);
         };
 
         myArr1.push(i);
@@ -167,12 +164,16 @@ console.group('Task 12 - method flat');
     console.log(myArr1);
 
     
-    // const newArr1 = myArr1.flat(2);
-    // console.log('newArr1 :>> ', newArr1);
+    const newArr1 = myArr1.flat();
+    console.log('newArr1 :>> ', newArr1);
 
     const newArr2 = myArr1.flat(2);
     console.log('newArr2 :>> ', newArr2);
 
-    console.log('superObj :>> ', superObj);
+    const newArr3 = myArr1.flat(3);
+    console.log('newArr3 :>> ', newArr3);
+
+    const newArr4 = myArr1.flat(0);
+    console.log('newArr4 :>> ', newArr4);
 
 console.groupEnd();
