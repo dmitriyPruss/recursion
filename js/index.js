@@ -48,7 +48,7 @@ function bracketWrapper3(n) {
 // 3. ** Реализовать функцию аналог flat для массивов. 
 // (https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/flat)
 
-console.groupCollapsed('Task 12 - method flat');
+console.group('Task 12 - method flat');
     function MyArray() {
         if (!new.target) {
           return new MyArray();
@@ -57,6 +57,9 @@ console.groupCollapsed('Task 12 - method flat');
     };
       
     const myArrayProto = new MyArray();
+
+
+    
 
     myArrayProto.pop = function() {
         if(this.length === 0) {
@@ -88,75 +91,88 @@ console.groupCollapsed('Task 12 - method flat');
         this[0] = item;
         return ++this.length;
     };
-    myArrayProto.flat = function(item) {
-        let returningObj = {};
-        
-        for(let i = 0; i <= this.length; i++) {
-            
-            if (Array.isArray(this[i])) {
 
-                
-                const self = this[i];
-                // console.log('i + 1 :>> ', i + 1);
-                // console.log('this[i + 1] :>> ', this[i + 1]);
-                
-                // for (let j = 0; j < i; j++) {
-                //     startObj[j] = this[j];
-                // };
-                // console.log('startObj :>> ', startObj);
-                
-                let z = i + 1;
-                for (let j = z; j < this.length; j++) {
-                    console.log('this.length :>> ', this.length);
-                    console.log(`this[${j}] :>> `, this[j]);
-                    console.log('j + self.length - 1 :>> ', j + self.length - 1);
-                    console.log("------------------------------------");
-                    this[j + self.length - 1] = this[j]; 
-                };
-                
-                // endObj.length = Object.keys(endObj).length;
-                // console.log('endObj :>> ', endObj);
-                let counter = 0;
-                delete this[i];
-                for(let j = i; j < self.length + i; j++) {
-                    // console.log('j :>> ', j);
-                    // console.log('self[counter] :>> ', self[counter]);
-                    // console.log('self :>> ', self);
-
-                    this[j] = self[counter];
-                    counter++;
-                };
-                
-            };
-        };
-
-        // returningObj = Object.assign(startObj, middleObj, endObj);
-        // console.log('Object.keys(returningObj) :>> ', Object.keys(returningObj));
-        
-        // returningObj.length = Object.keys(returningObj).length;
-    
-        // returningObj.__proto__ = myArrayProto;
-        return this;
-    };
-      
 
 
     MyArray.prototype = myArrayProto;
+    const superObj = new MyArray();
+    const arrObj = new MyArray();
+    let m = 2;
+    
+    myArrayProto.flat = function(n) {
+    
+        let returningObj = new MyArray();
+
+        for(let i = 0; i < this.length; i++) {
+            if (n === 0) {
+                return this;
+            };
+
+            if ( Array.isArray(this[i]) ) {
+                if (!n) {
+                    const arr = this[i].join(',').split(',');
+
+                    for (let j = 0; j < arr.length; j++) {
+                        returningObj.push(arr[j]);
+                    };
+                };
+
+                console.log('n :>> ', n);
+                console.log(`this[${i}] :>> `, this[i]);
+                const arr = this[i];
+
+                this[i].forEach(item => {
+                   
+                    if (!Array.isArray(item) ) {
+                        superObj.push(item + ' - rec n = ' + n);
+                    } else if (n === 1) { 
+                        superObj.push(item + ' - rec n = ' + n);
+                    } else {
+                        returningObj.flat.call(this[i], n - 1);
+                    }
+                });
+            } else if (this[i] === ' ') {
+                delete this[i];
+            } else {
+                returningObj.push(this[i]);
+                if (n === m) {
+                    superObj.push(this[i] + '- elem');
+                }
+            };
+            
+        };
+        
+        return returningObj;
+    };
+
       
     const myArr1 = new MyArray();
 
-    for(let i = 0; i <= 5; i++) {
-        if (i === 3) {
+    for(let i = 0; i <= 6; i++) {
+        if (i === 2) {
+            myArr1.push(' ');
+        };
+        if(i === 3) {
+            myArr1.push(['lll', ['dddd', ['Ivan', 'Hert'], 'ffd'], 'GGGG']);
+        };
+        if (i === 5) {
             myArr1.push(['w', 's', 'uyu']);
         };
         if(i === 4) {
             myArr1.push(['af', 'ft']);
         };
+
         myArr1.push(i);
     };
     console.log(myArr1);
 
-    const newArr = myArr1.flat();
-    console.log('newArr :>> ', newArr);
+    
+    // const newArr1 = myArr1.flat(2);
+    // console.log('newArr1 :>> ', newArr1);
+
+    const newArr2 = myArr1.flat(2);
+    console.log('newArr2 :>> ', newArr2);
+
+    console.log('superObj :>> ', superObj);
 
 console.groupEnd();
