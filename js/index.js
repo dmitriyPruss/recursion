@@ -109,8 +109,7 @@ console.group('** Task 3 - method flat');
             return this;
         };
 
-        const runFlat = flatten.bind(this, n);
-        runFlat(); 
+        flatten.call(this, n);
         
         function flatten(n) {
             for(let i = 0; i < this.length; i++) {
@@ -164,17 +163,27 @@ console.group('** Task 3 - method flat');
 
         myArr1.push(i);
     };
-    console.log(`myArr1 >>`, myArr1);
+    
+    console.log(`myArr1 >>`);
+    console.dir(myArr1);
     
     const newArr1 = myArr1.flat();
-    console.log('newArr1 :>> ', newArr1);
+    console.log('newArr1 >> flat()');
+    console.dir(newArr1);
 
-    const newArr2 = myArr1.flat(2);
-    console.log('newArr2 :>> ', newArr2);
+    const newArr2 = myArr1.flat(0);
+    console.log('newArr2 >> flat(0)');
+    console.dir(newArr2);
 
-    const newArr3 = myArr1.flat(3);
-    console.log('newArr3 :>> ', newArr3);
+    const newArr3 = myArr1.flat(1);
+    console.log('newArr3 >> flat(1)');
+    console.dir(newArr3);
 
-    const newArr4 = myArr1.flat(0);
-    console.log('newArr4 :>> ', newArr4);
+    const newArr4 = myArr1.flat(2);
+    console.log('newArr4 >> flat(2)');
+    console.dir(newArr4);
+
+    const newArr5 = myArr1.flat(3);
+    console.log('newArr5 >> flat(3)');
+    console.dir(newArr5);
 console.groupEnd();
