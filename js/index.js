@@ -33,19 +33,16 @@ console.groupCollapsed('Task 2');
     bracketWrapper3(5);
 
     function bracketWrapper3(n) {
-        const brackets = [];
         bracketWrapperRec(n);
         
         function bracketWrapperRec(n) {
             if (n === 0) {          
                 return;
             };
-            brackets.push('(');
+            console.log('(');
             bracketWrapperRec(n - 1);
-            brackets.push(')');
+            console.log(')');
         };
-        console.log('brackets.join("") :>> ', brackets.join(''));
-        return brackets;
     };
 console.groupEnd();
 
@@ -100,7 +97,7 @@ console.group('** Task 3 - method flat');
     };
   
     // flat method
-    myArrayProto.flat = function(n) {
+    myArrayProto.flat = function(n = 1) {
 
         const superObj = new MyArray();
         const m = n;
@@ -114,23 +111,15 @@ console.group('** Task 3 - method flat');
         function flatten(n) {
             for(let i = 0; i < this.length; i++) {
                 if ( Array.isArray(this[i]) ) {
-                    if (n === undefined) {
-                        const arr = this[i].join(',').split(',');
-    
-                        for (let j = 0; j < arr.length; j++) {
-                            superObj.push(arr[j]);
-                        }; 
-                    } else {
-                        this[i].forEach(item => {
-                            if ( !Array.isArray(item) ) {
-                                superObj.push(item);
-                            } else if (n === 1) { 
-                                superObj.push(item);
-                            } else {
-                                flatten.call(this[i], n - 1);
-                            }
-                        });
-                    };
+                    this[i].forEach(item => {
+                        if ( !Array.isArray(item) ) {
+                            superObj.push(item);
+                        } else if (n === 1) { 
+                            superObj.push(item);
+                        } else {
+                            flatten.call(this[i], n - 1);
+                        }
+                    });
                 } else if (this[i] === ' ') {
                     continue;
                 } else {
